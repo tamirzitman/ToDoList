@@ -1,12 +1,12 @@
 ﻿import React from "react";
 
-const AddItem = (onAdd) => {
+const AddItem = ({ onAdd }) => {
   const [text, setText] = React.useState([]);
 
   const onSubmit = (e) => {
-    e.preverntDefault();
+    e.preventDefault();
     if (!text) {
-      alert("please add text to your item");
+      alert("Please add text to your item");
       return;
     }
     onAdd({ text });
@@ -14,7 +14,7 @@ const AddItem = (onAdd) => {
   };
 
   return (
-    <from className="add-form" onSubmit={onSubmit}>
+    <form className="add-form" onSubmit={onSubmit}>
       <div className="form-control">
         <input
           type="text"
@@ -23,12 +23,9 @@ const AddItem = (onAdd) => {
           onChange={(e) => setText(e.target.value)}
         />
       </div>
-      {/* <div className="form-control">
-        <label>Item</label>
-        <input type="text" placeholder="Add New Item"></input>
-      </div> */}
+
       <input type="submit" value="Save" className="btn btn-block" />
-    </from>
+    </form>
   );
 };
 

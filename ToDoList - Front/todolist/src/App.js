@@ -24,6 +24,7 @@ const App = () => {
 
   // Add Item:
   const addItem = (text) => {
+    console.log("now in addItem Function ");
     const textObject = {
       text,
     };
