@@ -1,3 +1,4 @@
 ﻿node_modules
 other.txt
 reposetories\to-do-items-mock.json
+.env
