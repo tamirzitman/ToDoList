@@ -30,11 +30,21 @@ const App = () => {
     });
   };
 
+  // Get Single Item:
+  function getItem(ID) {
+    axios.get(baseURL + "/to-do-item/", ID).then((response) => {
+      console.log(`Got requested item : ${response.data}`);
+    });
+  }
+
   // Check Item:
   const checkItem = (ID) => {
     const IDObject = {
-      ID,
+      _id: ID,
     };
+
+    getItem(IDObject);
+    console.log("IDObject is :", IDObject);
     axios
       .post(baseURL + "/to-do-item/tick", IDObject)
       .then((response) => {

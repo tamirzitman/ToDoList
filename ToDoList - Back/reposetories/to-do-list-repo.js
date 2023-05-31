@@ -1,52 +1,39 @@
 ﻿import { promises as fs } from "fs";
 import ToDoListItem from "../model/to-do-list-item.js";
 
-const jsonPath = "./reposetories/to-do-items-mock.json";
-
 // Get all items
-export const getAllItems = () => getListObject();
+export async function getAllItems() {
+  return await ToDoListItem.find({});
+}
+
+// Get one item
+export async function getOneItem(ID) {
+  return await ToDoListItem.find({ _id: ID });
+}
 
 // Add item
-export async function addToDoListItem(text) {
-  const list = await getListObject();
-  const newItem = {
-    ID: getNextID(list),
-    text,
-    completed: false,
-    // creation: Date.now()
-  };
-  list.push(newItem);
-
-  await updateListObject(list, jsonPath);
-  return newItem;
+export async function addItem(text) {
+  return await ToDoListItem.insertMany({ text });
 }
-//**************************************//
 
 // Remove item by ID
 export async function removeItem(ID) {
-  const list = await getListObject();
-
-  const removeInd = getItemIndexByID(ID, list);
-
-  list.splice(removeInd, 1);
-
-  await updateListObject(list, jsonPath);
-
-  return `ID ${ID} Sucessfully removed`;
+  return await ToDoListItem.deleteOne({ _id: ID });
 }
-//**************************************//
 
 // Tick item as completed
 export async function tickItem(ID) {
-  const newList = await getListObject();
-
-  // Locate the todo item in the array and set its completed property to the opposite.
-  const index = newList.findIndex((item) => item.ID === Number(ID));
-  newList[index].completed = !newList[index].completed;
-
-  await updateListObject(newList, jsonPath);
+  return await ToDoListItem.findOneAndUpdate({ _id: ID }, [
+    { $set: { completed: true } },
+  ]);
 }
-//**************************************//
+
+// UnTick item as completed
+export async function untickItem(ID) {
+  return await ToDoListItem.findOneAndUpdate({ _id: ID }, [
+    { $set: { completed: { $not: false } } },
+  ]);
+}
 //**************************************//
 
 // Helpers
@@ -67,19 +54,6 @@ function getItemIndexByID(ID, JsonObject) {
   } else {
     throw "Could not get the index for the selected ID";
   }
-}
-
-async function getListObject() {
-  const x = await ToDoListItem.find({});
-  console.log(x);
-  return x;
-  // const rawData = await fs.readFile(jsonPath, "UTF8");
-  // try {
-  //   const parsedObject = JSON.parse(rawData);
-  //   return parsedObject;
-  // } catch (error) {
-  //   throw new Error("Could not parse JSON");
-  // }
 }
 
 async function updateListObject(todoListObject, filePath) {
