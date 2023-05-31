@@ -24,11 +24,7 @@ const App = () => {
 
   // Add Item:
   const addItem = (text) => {
-    console.log("now in addItem Function ");
-    const textObject = {
-      text,
-    };
-    axios.post(baseURL + "/to-do-item/", textObject).then((response) => {
+    axios.post(baseURL + "/to-do-item/", text).then((response) => {
       console.log(`added : ${response}`);
     });
     getAllItems();
