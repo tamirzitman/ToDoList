@@ -103,10 +103,5 @@
         "ID": 22,
         "text": "Build automation",
         "completed": true
-    },
-    {
-        "ID": 23,
-        "text": "test",
-        "completed": false
     }
 ]
