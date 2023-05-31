@@ -2,7 +2,7 @@
     {
         "ID": 1,
         "text": "Complete project proposal",
-        "completed": false
+        "completed": true
     },
     {
         "ID": 2,
@@ -22,7 +22,7 @@
     {
         "ID": 6,
         "text": "Call mom",
-        "completed": false
+        "completed": true
     },
     {
         "ID": 7,
@@ -32,7 +32,7 @@
     {
         "ID": 8,
         "text": "Prepare presentation",
-        "completed": true
+        "completed": false
     },
     {
         "ID": 9,
@@ -42,17 +42,17 @@
     {
         "ID": 10,
         "text": "Go for a run",
-        "completed": false
+        "completed": true
     },
     {
         "ID": 11,
         "text": "Buy birthday gift",
-        "completed": true
+        "completed": false
     },
     {
         "ID": 12,
         "text": "Write an article",
-        "completed": true
+        "completed": false
     },
     {
         "ID": 13,
@@ -62,7 +62,7 @@
     {
         "ID": 14,
         "text": "Research vacation destinations",
-        "completed": false
+        "completed": true
     },
     {
         "ID": 15,
@@ -82,12 +82,12 @@
     {
         "ID": 18,
         "text": "Take the car for servicing",
-        "completed": false
+        "completed": true
     },
     {
         "ID": 19,
         "text": "Organize files and folders",
-        "completed": true
+        "completed": false
     },
     {
         "ID": 20,
@@ -97,11 +97,26 @@
     {
         "ID": 21,
         "text": "Plan weekend activities",
-        "completed": false
+        "completed": true
     },
     {
         "ID": 22,
         "text": "Build automation",
+        "completed": true
+    },
+    {
+        "ID": 23,
+        "text": "Test",
+        "completed": true
+    },
+    {
+        "ID": 24,
+        "text": "Thank Eitan",
+        "completed": false
+    },
+    {
+        "ID": 25,
+        "text": "Buy cake",
         "completed": true
     }
 ]

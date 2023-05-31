@@ -26,8 +26,8 @@ const App = () => {
   const addItem = (text) => {
     axios.post(baseURL + "/to-do-item/", text).then((response) => {
       console.log(`added : ${response}`);
+      getAllItems();
     });
-    getAllItems();
   };
 
   // Check Item:
@@ -35,11 +35,16 @@ const App = () => {
     const IDObject = {
       ID,
     };
-    axios.post(baseURL + "/to-do-item/tick", IDObject).then((response) => {
-      console.log(response);
-    });
-    console.log("check", ID);
-    getAllItems();
+    axios
+      .post(baseURL + "/to-do-item/tick", IDObject)
+      .then((response) => {
+        console.log("check", ID);
+        getAllItems();
+        console.log(response);
+      })
+      .catch((err) => {
+        alert(err);
+      });
   };
 
   // JSX syntax

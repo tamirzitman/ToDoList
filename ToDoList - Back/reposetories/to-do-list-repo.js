@@ -1,67 +1,50 @@
-﻿import fs from "node:fs";
+﻿import { promises as fs } from "fs";
+import ToDoListItem from "../model/to-do-list-item.js";
 
 const jsonPath = "./reposetories/to-do-items-mock.json";
 
 // Get all items
-export function getAllItems() {
-  const list = getListObject();
-  if (testArray(list)) {
-    return list;
-  }
-}
-// Another Way - sugar Syntax
-// export const getAllItems = () => list;
-//**************************************//
+export const getAllItems = () => getListObject();
 
 // Add item
-export function addToDoListItem(text) {
-  const list = getListObject();
+export async function addToDoListItem(text) {
+  const list = await getListObject();
   const newItem = {
     ID: getNextID(list),
     text,
     completed: false,
     // creation: Date.now()
   };
-  const newList = getListObject();
-  newList.push(newItem);
+  list.push(newItem);
 
-  console.log(newList);
-  updateListObject(newList, jsonPath);
+  await updateListObject(list, jsonPath);
   return newItem;
 }
 //**************************************//
 
 // Remove item by ID
-export function removeItem(ID) {
-  const list = getListObject();
+export async function removeItem(ID) {
+  const list = await getListObject();
 
   const removeInd = getItemIndexByID(ID, list);
-  console.log`the ID to be removed located on Index: ${removeInd}`;
 
   list.splice(removeInd, 1);
 
-  console.log("new list is:" + JSON.stringify(list));
-
-  updateListObject(list, jsonPath);
+  await updateListObject(list, jsonPath);
 
   return `ID ${ID} Sucessfully removed`;
 }
 //**************************************//
 
 // Tick item as completed
-export function tickItem(ID) {
-  const newList = getListObject();
+export async function tickItem(ID) {
+  const newList = await getListObject();
 
   // Locate the todo item in the array and set its completed property to the opposite.
   const index = newList.findIndex((item) => item.ID === Number(ID));
   newList[index].completed = !newList[index].completed;
 
-  updateListObject(newList, jsonPath);
-  if (newList[index].completed) {
-    return `ID ${ID} Sucessfully ticked`;
-  } else {
-    return `ID ${ID} Sucessfully unticked`;
-  }
+  await updateListObject(newList, jsonPath);
 }
 //**************************************//
 //**************************************//
@@ -75,15 +58,10 @@ function getNextID(toDoList) {
   return max + 1;
 }
 
-function testArray(toDoList) {
-  return toDoList.length != 0;
-}
-
 function getItemIndexByID(ID, JsonObject) {
   const itemIndex = JsonObject.findIndex((object) => {
     return object.ID === ID;
   });
-  console.log("itemIndex: " + itemIndex);
   if (itemIndex > 0) {
     return itemIndex;
   } else {
@@ -91,41 +69,22 @@ function getItemIndexByID(ID, JsonObject) {
   }
 }
 
-function getItem(ID) {
-  const list = getListObject();
-  const item = list.find((item) => item.ID === ID);
-  if (item) {
-    console.log("item was found: " + JSON.stringify(item));
-    return item;
-  } else {
-    throw new Error("Item not found.");
-  }
+async function getListObject() {
+  const x = await ToDoListItem.find({});
+  console.log(x);
+  return x;
+  // const rawData = await fs.readFile(jsonPath, "UTF8");
+  // try {
+  //   const parsedObject = JSON.parse(rawData);
+  //   return parsedObject;
+  // } catch (error) {
+  //   throw new Error("Could not parse JSON");
+  // }
 }
 
-function getListObject() {
-  console.log("Reading JSON file");
-  const rawData = fs.readFileSync(jsonPath, "UTF8");
-  try {
-    const parsedObject = JSON.parse(rawData);
-    console.log("Parsed JSON:");
-    console.log(parsedObject);
-    return parsedObject;
-  } catch (error) {
-    console.log(error);
-    throw new Error("Could not parse JSON");
-  }
-}
-
-function updateListObject(todoListObject, filePath) {
+async function updateListObject(todoListObject, filePath) {
   // stringify readable JSON Object
-  console.log("Starting to update your JSON file");
   const stringifiedJSON = JSON.stringify(todoListObject);
 
-  fs.writeFile(filePath, stringifiedJSON, (err, data) => {
-    if (err) {
-      throw err;
-    } else {
-      return data;
-    }
-  });
+  await fs.writeFile(filePath, stringifiedJSON);
 }
