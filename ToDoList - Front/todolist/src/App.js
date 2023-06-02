@@ -19,6 +19,7 @@ const App = () => {
 
   // One Way Data
   const [items, setItems] = React.useState([]);
+  const [showAddItem, setShowAddItem] = React.useState(false);
 
   // Fetch data from API
   React.useEffect(() => getAllItems(), []);
@@ -59,9 +60,12 @@ const App = () => {
   // JSX syntax
   return (
     <div className="container">
-      <Header title={HeaderText} />
-      <AddItem onAdd={addItem} />
-      <br></br>
+      <Header
+        title={HeaderText}
+        onReveal={() => setShowAddItem(!showAddItem)}
+        showAdd={showAddItem}
+      />
+      {showAddItem && <AddItem onAdd={addItem} />}
 
       <List
         items={items}
