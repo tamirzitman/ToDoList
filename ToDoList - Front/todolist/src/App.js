@@ -3,6 +3,7 @@ import axios from "axios";
 import Header from "./components/Header";
 import List from "./components/List";
 import AddItem from "./components/AddItem";
+import EditItem from "./components/EditItem";
 
 const backEndPort = 3001;
 const baseURL = `http://localhost:${backEndPort}`;
@@ -17,26 +18,27 @@ const App = () => {
     });
   }
 
-  // One Way Data
+  // One Way Data - React hooks
   const [items, setItems] = React.useState([]);
-  const [showAddItem, setShowAddItem] = React.useState(false);
 
-  // Fetch data from API
+  const [showAddItem, setShowAddItem] = React.useState(false);
+  const [showEditItem, setShowEditItem] = React.useState(false);
+
+  const [editingText, setEditingText] = React.useState("");
+
+  // Fetch data from API, will fire only on first rander
   React.useEffect(() => getAllItems(), []);
 
   // Add Item:
   const addItem = (text) => {
     axios.post(baseURL + "/to-do-item/", text).then((response) => {
-      console.log(`added : ${response}`);
       getAllItems();
     });
   };
 
   // Get Single Item - currently not in use:
   const getItem = (ID) => {
-    axios.get(baseURL + "/to-do-item/single", ID).then((response) => {
-      console.log(`Got requested single item : ${response.data}`);
-    });
+    axios.get(baseURL + "/to-do-item/single", ID).then((response) => {});
   };
 
   // Check Item:
@@ -57,6 +59,49 @@ const App = () => {
         alert(err);
       });
   };
+
+  // Remove an Item:
+  const deleteItem = (ID) => {
+    const IDObject = {
+      _id: ID,
+    };
+    axios
+      .delete(baseURL + "/to-do-item", { data: IDObject })
+      .then((response) => getAllItems())
+      .catch((error) => {
+        console.error("Error deleting item:", error);
+      });
+  };
+
+  // Reveal edit menu:
+  const revealEditItem = (ID, text) => {
+    setShowEditItem(true);
+    const object = {
+      _id: ID,
+      text,
+    };
+    setEditingText(object);
+    console.log("in revealEditItem func FRONT, object is :", object);
+  };
+
+  // Edit an Item:
+  const editItem = (textObject) => {
+    const updateObject = {
+      _id: editingText._id,
+      text: textObject.text,
+    };
+
+    axios
+      .post(baseURL + "/to-do-item/edit", updateObject)
+      .then((response) => {
+        setShowEditItem(false);
+        getAllItems();
+      })
+      .catch((error) => {
+        console.error("Error deleting item:", error);
+      });
+  };
+
   // JSX syntax
   return (
     <div className="container">
@@ -66,10 +111,20 @@ const App = () => {
         showAdd={showAddItem}
       />
       {showAddItem && <AddItem onAdd={addItem} />}
-
+      {showEditItem && (
+        <EditItem
+          onEdit={(textObject) => editItem(textObject)}
+          currentText={editingText.text}
+          closeEditMenu={() => setShowEditItem(false)}
+        />
+      )}
       <List
         items={items}
         onCheck={(ID, asCompleted) => checkItem(ID, asCompleted)}
+        onDelete={(ID) => deleteItem(ID)}
+        onEdit={(ID, text) => {
+          revealEditItem(ID, text);
+        }}
       />
     </div>
   );

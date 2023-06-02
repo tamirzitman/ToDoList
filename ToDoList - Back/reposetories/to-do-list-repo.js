@@ -26,6 +26,11 @@ export async function removeItem(ID) {
 }
 
 // Tick item as completed
+export async function editItem(ID, text) {
+  return await ToDoListItem.findOneAndUpdate({ _id: ID }, [{ $set: { text } }]);
+}
+
+// Tick item as completed
 export async function tickItem(ID) {
   return await ToDoListItem.findOneAndUpdate({ _id: ID }, [
     { $set: { completed: true } },

@@ -6,6 +6,7 @@ import {
   removeItem,
   tickItem,
   untickItem,
+  editItem,
 } from "../reposetories/to-do-list-repo.js";
 
 const router = Router();
@@ -27,7 +28,6 @@ router.get("/", (req, res) => {
 // Get a single Item:
 router.get("/single", (req, res) => {
   const IDObject = req.body;
-  console.log("IDObject in /get /single is:", IDObject);
   getSingleItem(IDObject)
     .then((response) => res.send(response))
     .catch((err) => {
@@ -57,6 +57,19 @@ router.delete("/", (req, res) => {
     .catch((err) => {
       res.status(500).send(err);
       console.error(`Deleting item failed ${err} `);
+    });
+});
+
+// Edit an Item:
+router.post("/edit", (req, res) => {
+  const ID = req.body._id;
+  const text = req.body.text;
+
+  editItem(ID, text)
+    .then((response) => res.send(response))
+    .catch((err) => {
+      res.status(500).send(err);
+      console.error(`Editing item failed ${err} `);
     });
 });
 
