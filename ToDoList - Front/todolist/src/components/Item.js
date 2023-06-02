@@ -4,7 +4,6 @@ const Item = ({ item, onCheck }) => {
   let selectedClassName;
   let checkIcon;
   let checkStyle;
-  let textItem;
 
   if (item.completed) {
     selectedClassName = "tickedItem";
@@ -13,7 +12,10 @@ const Item = ({ item, onCheck }) => {
       cursor: "pointer",
     };
     checkIcon = (
-      <FaCheckSquare style={checkStyle} onClick={() => onCheck(item.ID)} />
+      <FaCheckSquare
+        style={checkStyle}
+        onClick={() => onCheck(item._id, !item.completed)}
+      />
     );
   } else {
     selectedClassName = "item";
@@ -22,11 +24,17 @@ const Item = ({ item, onCheck }) => {
       cursor: "pointer",
     };
     checkIcon = (
-      <FaSquare style={checkStyle} onClick={() => onCheck(item.ID)} />
+      <FaSquare
+        style={checkStyle}
+        onClick={() => onCheck(item._id, !item.completed)}
+      />
     );
   }
   return (
-    <div className={selectedClassName} onClick={() => onCheck(item.ID)}>
+    <div
+      className={selectedClassName}
+      onClick={() => onCheck(item._id, !item.completed)}
+    >
       <h3>
         {item.text}
         {checkIcon}

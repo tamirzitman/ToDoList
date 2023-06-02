@@ -10,6 +10,7 @@ const baseURL = `http://localhost:${backEndPort}`;
 let HeaderText = "My To Do List App";
 
 const App = () => {
+  // Get all items
   function getAllItems() {
     axios.get(baseURL + "/to-do-item").then((response) => {
       setItems(response.data);
@@ -30,40 +31,42 @@ const App = () => {
     });
   };
 
-  // Get Single Item:
-  function getItem(ID) {
-    axios.get(baseURL + "/to-do-item/", ID).then((response) => {
-      console.log(`Got requested item : ${response.data}`);
+  // Get Single Item - currently not in use:
+  const getItem = (ID) => {
+    axios.get(baseURL + "/to-do-item/single", ID).then((response) => {
+      console.log(`Got requested single item : ${response.data}`);
     });
-  }
+  };
 
   // Check Item:
-  const checkItem = (ID) => {
+  const checkItem = (ID, asCompleted) => {
+    let endPoint = "untick";
     const IDObject = {
       _id: ID,
     };
+    // if item was completed >> Change endPoint Target to tick
+    if (asCompleted) endPoint = "tick";
 
-    getItem(IDObject);
-    console.log("IDObject is :", IDObject);
     axios
-      .post(baseURL + "/to-do-item/tick", IDObject)
+      .post(baseURL + "/to-do-item/" + endPoint, IDObject)
       .then((response) => {
-        console.log("check", ID);
         getAllItems();
-        console.log(response);
       })
       .catch((err) => {
         alert(err);
       });
   };
-
   // JSX syntax
   return (
     <div className="container">
       <Header title={HeaderText} />
       <AddItem onAdd={addItem} />
       <br></br>
-      <List items={items} onCheck={checkItem} />
+
+      <List
+        items={items}
+        onCheck={(ID, asCompleted) => checkItem(ID, asCompleted)}
+      />
     </div>
   );
 };

@@ -2,7 +2,7 @@
 import {
   addItem,
   getAllItems,
-  getOneItem,
+  getSingleItem,
   removeItem,
   tickItem,
   untickItem,
@@ -16,24 +16,24 @@ router.get("/", (req, res) => {
   // req.query
   // req.params
 
-  // Empty ID key was sent, searching for everything
-  const all = Object.keys(req.query).length === 0;
-  if (all) {
-    getAllItems()
-      .then((response) => res.send(response))
-      .catch((err) => {
-        res.status(500).send(err);
-        console.error(`Getting all items failed ${err} `);
-      });
-  } else {
-    const ID = req.query;
-    getOneItem(ID)
-      .then((response) => res.send(response))
-      .catch((err) => {
-        res.status(500).send(err);
-        console.error(`Getting all items failed ${err} `);
-      });
-  }
+  getAllItems()
+    .then((response) => res.send(response))
+    .catch((err) => {
+      res.status(500).send(err);
+      console.error(`Getting all items failed ${err} `);
+    });
+});
+
+// Get a single Item:
+router.get("/single", (req, res) => {
+  const IDObject = req.body;
+  console.log("IDObject in /get /single is:", IDObject);
+  getSingleItem(IDObject)
+    .then((response) => res.send(response))
+    .catch((err) => {
+      res.status(500).send(err);
+      console.error(`Getting single item has failed ${err} `);
+    });
 });
 
 // Add New Item:
