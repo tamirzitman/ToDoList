@@ -1,23 +1,22 @@
 ﻿import { Router } from "express";
 import {
-  addToDoListItem,
+  addItem,
   getAllItems,
+  getSingleItem,
   removeItem,
   tickItem,
+  untickItem,
+  editItem,
 } from "../reposetories/to-do-list-repo.js";
 
 const router = Router();
 
 // Get All Items:
 router.get("/", (req, res) => {
-  // const { userID } = req.query;
   // req.body
   // req.query
   // req.params
 
-  // userID
-  //   ? console.log("UserID =" + userID)
-  //   : console.log("No userID was specified");
   getAllItems()
     .then((response) => res.send(response))
     .catch((err) => {
@@ -26,11 +25,22 @@ router.get("/", (req, res) => {
     });
 });
 
+// Get a single Item:
+router.get("/single", (req, res) => {
+  const IDObject = req.body;
+  getSingleItem(IDObject)
+    .then((response) => res.send(response))
+    .catch((err) => {
+      res.status(500).send(err);
+      console.error(`Getting single item has failed ${err} `);
+    });
+});
+
 // Add New Item:
 router.post("/", (req, res) => {
   const { text } = req.body;
 
-  addToDoListItem(text)
+  addItem(text)
     .then((response) => res.send(response))
     .catch((err) => {
       res.status(500).send(err);
@@ -40,7 +50,7 @@ router.post("/", (req, res) => {
 
 // Delete an Item:
 router.delete("/", (req, res) => {
-  const { ID } = req.body;
+  const ID = req.body._id;
 
   removeItem(ID)
     .then((response) => res.send(response))
@@ -50,15 +60,40 @@ router.delete("/", (req, res) => {
     });
 });
 
+// Edit an Item:
+router.post("/edit", (req, res) => {
+  const ID = req.body._id;
+  const text = req.body.text;
+
+  editItem(ID, text)
+    .then((response) => res.send(response))
+    .catch((err) => {
+      res.status(500).send(err);
+      console.error(`Editing item failed ${err} `);
+    });
+});
+
 // Tick Item:
 router.post("/tick", (req, res) => {
-  const { ID } = req.body;
+  const ID = req.body._id;
 
   tickItem(ID)
     .then((response) => res.send(response))
     .catch((err) => {
       res.status(500).send(err);
       console.error(`Ticking item failed ${err} `);
+    });
+});
+
+// UnTick Item:
+router.post("/untick", (req, res) => {
+  const ID = req.body._id;
+
+  untickItem(ID)
+    .then((response) => res.send(response))
+    .catch((err) => {
+      res.status(500).send(err);
+      console.error(`UnTicking item failed ${err} `);
     });
 });
 
