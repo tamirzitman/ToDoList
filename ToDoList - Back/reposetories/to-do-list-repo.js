@@ -1,18 +1,13 @@
 ﻿import ToDoListItem from "../model/to-do-list-item.js";
 
 // Get all items
-export async function getAllItems() {
-  return await ToDoListItem.find({});
+export function getAllItems() {
+  return ToDoListItem.find({});
 }
 
 // Get one item
 export async function getSingleItem(ID) {
-  const item = await ToDoListItem.find({ ID });
-  if (item.length === 1) {
-    return item[0];
-  } else {
-    throw "could not find single item to retrive";
-  }
+  return await ToDoListItem.findById(ID);
 }
 
 // Add item
@@ -22,7 +17,7 @@ export async function addItem(text) {
 
 // Remove item by ID
 export async function removeItem(ID) {
-  return await ToDoListItem.deleteOne({ _id: ID });
+  return await ToDoListItem.findByIdAndDelete(ID);
 }
 
 // Tick item as completed

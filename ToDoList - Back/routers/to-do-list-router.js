@@ -62,10 +62,9 @@ router.delete("/", (req, res) => {
 
 // Edit an Item:
 router.post("/edit", (req, res) => {
-  const ID = req.body._id;
-  const text = req.body.text;
+  const { _id, text } = req.body;
 
-  editItem(ID, text)
+  editItem(_id, text)
     .then((response) => res.send(response))
     .catch((err) => {
       res.status(500).send(err);
